@@ -1,4 +1,3 @@
-from torchvision.transforms import ToTensor
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import torchvision.datasets as datasets
@@ -9,8 +8,17 @@ import matplotlib.pyplot as plt
 def get_data(BATCH:int = 32, DOWNLOAD_DATASET:bool = False):
     ROOT: str = "./data"
     
-    train_dataset = datasets.CIFAR10(download=DOWNLOAD_DATASET, root=ROOT, train=True, transform=ToTensor(), target_transform=None)
-    test_dataset = datasets.CIFAR10(download=DOWNLOAD_DATASET, root=ROOT, train=False, transform=ToTensor(), target_transform=None)
+    train_transform = transforms.Compose([
+        transforms.TrivialAugmentWide(),
+        transforms.ToTensor()
+    ])
+
+    test_transform = transforms.Compose([
+        transforms.ToTensor()
+    ])
+
+    train_dataset = datasets.CIFAR10(download=DOWNLOAD_DATASET, root=ROOT, train=True, transform=train_transform, target_transform=None)
+    test_dataset = datasets.CIFAR10(download=DOWNLOAD_DATASET, root=ROOT, train=False, transform=test_transform, target_transform=None)
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH, shuffle=True)
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=BATCH, shuffle=False)
 

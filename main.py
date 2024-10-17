@@ -9,7 +9,7 @@ import train_test
 import torch
 
 
-EPOCHS: int = 3
+EPOCHS: int = 1
 LEARNING_RATE: float = 0.001
 
 class CIFAR_classifier(nn.Module):
@@ -20,27 +20,23 @@ class CIFAR_classifier(nn.Module):
             nn.Conv2d(in_channels=in_channels, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
             nn.MaxPool2d(2)
         )
         self.layer2 = nn.Sequential(
             nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
-            nn.MaxPool2d(2)
-        )
-        self.layer3 = nn.Sequential(
-            nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
             nn.ReLU(),
-            nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=1),
             nn.MaxPool2d(2)
         )
         self.classifier = nn.Sequential(
                 nn.Flatten(),
-                nn.Linear(in_features=hidden_units*4*4, out_features=out_channels)
+                nn.Linear(in_features=hidden_units*8*8, out_features=out_channels)
         )
 
     def forward(self, x):
-        return self.classifier(self.layer3(self.layer2(self.layer1(x))))
+        return self.classifier(self.layer2(self.layer1(x)))
 
 
 # torch.manual_seed(42)

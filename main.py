@@ -83,5 +83,5 @@ def eval_model(model:nn.Module, dataloader: DataLoader):
 
 
 if __name__ == "__main__":
-    train_model()
+    # train_model()
     eval_model(model, testLoader)
